@@ -7,6 +7,7 @@ namespace React.Sample.Webpack.CoreMvc
 	{
 		public static void Main(string[] args)
 		{
+			DotNetEnv.Env.Load();
 			BuildWebHost(args).Run();
 		}
 
