@@ -22,12 +22,14 @@ namespace React.Sample.Webpack.CoreMvc.Controllers
 				{"cpojer", new AuthorModel { Name = "Christoph Pojer", GithubUsername = "cpojer" }},
 				{"jordwalke", new AuthorModel { Name = "Jordan Walke", GithubUsername = "jordwalke" }},
 				{"zpao", new AuthorModel { Name = "Paul O'Shannessy", GithubUsername = "zpao" }},
+				{"yardenshoham", new AuthorModel { Name = "Yarden Shoham", GithubUsername = "yardenshoham"}}
 			};
 			_comments = new List<CommentModel>
 			{
 				new CommentModel { Author = _authors["daniel"], Text = "First!!!!111!" },
 				new CommentModel { Author = _authors["zpao"], Text = "React is awesome!" },
 				new CommentModel { Author = _authors["cpojer"], Text = "Awesome!" },
+				new CommentModel { Author = _authors["yardenshoham"], Text = "cool!" },
 				new CommentModel { Author = _authors["vjeux"], Text = "Hello World" },
 				new CommentModel { Author = _authors["daniel"], Text = "Foo" },
 				new CommentModel { Author = _authors["daniel"], Text = "Bar" },

@@ -51,6 +51,8 @@ namespace React.Sample.Webpack.CoreMvc
 					app.UseDeveloperExceptionPage();
 			}
 
+			app.UseHttpsRedirection();
+
 			app.UseStaticFiles();
 
 			app.UseRouting();
