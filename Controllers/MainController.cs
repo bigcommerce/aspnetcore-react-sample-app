@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DotNetEnv;
@@ -122,8 +120,11 @@ namespace SampleApp.Controllers
             return Redirect("/");
         }
 
-        private ActionResult Error(string message = "Internal Application Error") =>
-            BadRequest("<h4>An issue has occurred:</h4> <p>" + message + "</p> <a href=\"" + baseUrl + "\">Go back to home</a>");
+        private ActionResult Error(string message = "Internal Application Error")
+        {
+            Response.StatusCode = (int) HttpStatusCode.BadRequest;
+            return Content("<h4>An issue has occurred:</h4> <p>" + message + "</p> <a href=\"" + baseUrl + "\">Go back to home</a>", "text/html");
+        }
 
         private VerifiedSignedRequest VerifySignedRequest(string signedRequest)
         {
