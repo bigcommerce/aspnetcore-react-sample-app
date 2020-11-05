@@ -79,7 +79,7 @@ namespace SampleApp.Controllers
 
             string errorMessage = "An error occurred.";
 
-            if (response.Content.ToString().Length > 1 && response.StatusCode != HttpStatusCode.InternalServerError)
+            if (response.Content.ToString().Length > 0 && response.StatusCode != HttpStatusCode.InternalServerError)
             {
                 errorMessage = response.Content.ToString();
             }
