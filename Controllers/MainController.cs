@@ -13,7 +13,6 @@ using System.Security.Cryptography;
 
 namespace SampleApp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class MainController : ControllerBase
     {
@@ -38,6 +37,7 @@ namespace SampleApp.Controllers
         private string GetStoreHash()
             => Env.GetString("APP_ENV") == "local" ? Env.GetString("BC_LOCAL_STORE_HASH") : HttpContext.Session.GetString("store_hash");
 
+        [Route("auth/install")]
         public async Task<ActionResult> Install()
         {
             IQueryCollection query = Request.Query;
@@ -94,6 +94,7 @@ namespace SampleApp.Controllers
             return Error(errorMessage);
         }
 
+        [Route("auth/load")]
         public ActionResult Load(string signed_payload)
         {
             string signedPayload = signed_payload;
