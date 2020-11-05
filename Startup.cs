@@ -75,6 +75,7 @@ namespace React.Sample.Webpack.CoreMvc
 				endpoints.MapControllerRoute("comments-root", "comments", new { controller = "Home", action = "Index" });
 				endpoints.MapControllerRoute("comments", "comments/page-{page}", new { controller = "Home", action = "Comments" });
 				endpoints.MapControllerRoute("auth-install", "auth/install", new { controller = "Main", action = "Install" });
+				endpoints.MapControllerRoute("auth-load", "auth/load", new { controller = "Main", action = "Load" });
 			});
 		}
 	}

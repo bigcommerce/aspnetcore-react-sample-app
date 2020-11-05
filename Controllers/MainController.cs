@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text;
 using System.Net;
+using System.Security.Cryptography;
 
 namespace SampleApp.Controllers
 {
@@ -93,9 +94,70 @@ namespace SampleApp.Controllers
             return Error(errorMessage);
         }
 
+        public ActionResult Load(string signed_payload)
+        {
+            string signedPayload = signed_payload;
+            if (signedPayload.Length > 0)
+            {
+                VerifiedSignedRequest verifiedSignedRequest = VerifySignedRequest(signedPayload);
+                if (verifiedSignedRequest != null)
+                {
+                    HttpContext.Session.SetString("user_id", verifiedSignedRequest.user.id);
+                    HttpContext.Session.SetString("user_email", verifiedSignedRequest.user.email);
+                    HttpContext.Session.SetString("owner_id", verifiedSignedRequest.owner.id);
+                    HttpContext.Session.SetString("owner_email", verifiedSignedRequest.owner.email);
+                    HttpContext.Session.SetString("store_hash", verifiedSignedRequest.context);
+                }
+                else
+                {
+                    return Error("The signed request from BigCommerce could not be validated.");
+                }
+            }
+            else
+            {
+                return Error("The signed request from BigCommerce was empty.");
+            }
+
+            return Redirect("/");
+        }
 
         private ActionResult Error(string message = "Internal Application Error") =>
             BadRequest("<h4>An issue has occurred:</h4> <p>" + message + "</p> <a href=\"" + baseUrl + "\">Go back to home</a>");
+
+        private VerifiedSignedRequest VerifySignedRequest(string signedRequest)
+        {
+            string[] parts = signedRequest.Split('.', 2);
+            string encodedData = parts[0];
+            string encodedSignature = parts[1];
+
+            // decode the data
+            byte[] signature = Convert.FromBase64String(encodedSignature);
+            string jsonStr = Encoding.UTF8.GetString(Convert.FromBase64String(encodedData));
+
+            // confirm the signature
+            byte[] expectedSignature;
+            using (var hmacsha256 = new HMACSHA256(Encoding.UTF8.GetBytes(GetAppSecret())))
+            {
+                hmacsha256.ComputeHash(Encoding.UTF8.GetBytes(jsonStr));
+                expectedSignature = hmacsha256.Hash;
+            }
+            if (!SlowEquals(expectedSignature, signature))
+            {
+                Console.Error.WriteLine("Bad signed request from BigCommerce!");
+                return null;
+            }
+
+            return JsonSerializer.Deserialize<VerifiedSignedRequest>(jsonStr);
+        }
+
+        // from: https://bryanavery.co.uk/cryptography-net-avoiding-timing-attack/
+        private static bool SlowEquals(byte[] a, byte[] b)
+        {
+            uint diff = (uint)a.Length ^ (uint)b.Length;
+            for (int i = 0; i < a.Length && i < b.Length; i++)
+                diff |= (uint)(a[i] ^ b[i]);
+            return diff == 0;
+        }
 
         class InstallDto
         {
@@ -119,6 +181,13 @@ namespace SampleApp.Controllers
         {
             public string id;
             public string email;
+        }
+
+        class VerifiedSignedRequest
+        {
+            public string context;
+            public OauthUserDto user;
+            public OauthUserDto owner;
         }
     }
 }
