@@ -37,6 +37,7 @@ namespace React.Sample.Webpack.CoreMvc.Controllers
 			};
 		}
 
+		[Route("{path?}")]
 		public ActionResult Index()
 		{
 			return View(new IndexViewModel
@@ -47,6 +48,8 @@ namespace React.Sample.Webpack.CoreMvc.Controllers
 			});
 		}
 
+		[Route("/comments")]
+		[Route("/comments/page-{page}")]
 		public ActionResult Comments(int page)
 		{
 			var comments = _comments.Skip((page - 1) * COMMENTS_PER_PAGE).Take(COMMENTS_PER_PAGE);

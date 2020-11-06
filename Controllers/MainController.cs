@@ -10,6 +10,7 @@ using System.Text;
 using System.Net;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SampleApp.Controllers
 {
@@ -45,6 +46,7 @@ namespace SampleApp.Controllers
             {
                 return Error("Not enough information was passed to install this app.");
             }
+
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://login.bigcommerce.com/oauth2/token");
             Dictionary<string, string> body = new Dictionary<string, string>()
             {
@@ -123,6 +125,38 @@ namespace SampleApp.Controllers
             }
 
             return Redirect("/");
+        }
+
+        [Route("/bc-api/{endpoint}")]
+        public async Task<HttpResponseMessage> ProxyBigCommerceApiRequest(string endpoint)
+        {
+            if (endpoint == "v2")
+            {
+                // For v2 endpoints, add a .json to the end of each endpoint, to normalize against the v3 API standards
+                endpoint += ".json";
+            }
+            HttpResponseMessage response = await MakeBigCommerceApiRequest(endpoint);
+            return response;
+        }
+
+        private async Task<HttpResponseMessage> MakeBigCommerceApiRequest(string endpoint)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(Request.Method), "https://api.bigcommerce.com/" + GetStoreHash() + "/" + endpoint);
+            request.Headers.Add("X-Auth-Client", GetAppClientId());
+            request.Headers.Add("X-Auth-Token", GetAccessToken());
+            request.Headers.Add("Content-Type", "application/json");
+
+            if (Request.Method == "PUT")
+            {
+                string body;
+                using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+                {
+                    body = await reader.ReadToEndAsync();
+                }
+                request.Content = new StringContent(JsonSerializer.Serialize(body));
+            }
+
+            return await _clientFactory.CreateClient().SendAsync(request);
         }
 
         private ActionResult Error(string message = "Internal Application Error")
