@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import Home from "./home.jsx";
+import List from "./list.jsx";
 import { Tabs, Flex } from '@bigcommerce/big-design';
 
 export default function Index () {
@@ -13,6 +14,6 @@ export default function Index () {
         
     return <><Flex justifyContent="center"><Tabs activeTab={activeTab} items={items} onTabClick={setActiveTab} /></Flex>
             {activeTab === 'tab1' && <Home />}
-            {activeTab === 'tab2' && <Home />}</>;
+            {activeTab === 'tab2' && <List />}</>;
     }
 
