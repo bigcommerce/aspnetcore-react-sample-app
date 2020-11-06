@@ -7,6 +7,7 @@
     "build": "rimraf wwwroot/dist && webpack"
   },
   "dependencies": {
+    "@bigcommerce/big-design": "^0.24.0",
     "axios": "^0.21.0",
     "emotion": "^9.2.12",
     "emotion-server": "^9.2.12",
@@ -18,7 +19,7 @@
     "react-router-dom": "^5.0.0",
     "react-select": "^3.0.4",
     "reactstrap": "^8.0.0",
-    "styled-components": "^4.0.0"
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "7.8.7",
