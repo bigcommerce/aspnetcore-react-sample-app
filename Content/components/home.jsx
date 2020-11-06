@@ -75,7 +75,7 @@ export default class Home extends React.Component {
                                         flexWrap="wrap"
                                         >
                                            {fieldsInSummary.map(function (summaryItem) {
-                                               return <FlexItem alignSelf="auto" flexBasis="30%" margin="large" >
+                                               return <FlexItem key={summaryItem.index} alignSelf="auto" flexBasis="30%" margin="large" >
                                                    <Panel header={summaryItem.label} padding="xxSmall">
                                                         <H3>
                                                     {
