@@ -138,17 +138,16 @@ namespace SampleApp.Controllers
             string encodedSignature = parts[1];
 
             // decode the data
-            byte[] signature = Convert.FromBase64String(encodedSignature);
+            string signature = Encoding.UTF8.GetString(Convert.FromBase64String(encodedSignature));
             string jsonStr = Encoding.UTF8.GetString(Convert.FromBase64String(encodedData));
 
             // confirm the signature
-            byte[] expectedSignature;
+            string expectedSignature;
             using (var hmacsha256 = new HMACSHA256(Encoding.UTF8.GetBytes(GetAppSecret())))
             {
-                hmacsha256.ComputeHash(Encoding.UTF8.GetBytes(jsonStr));
-                expectedSignature = hmacsha256.Hash;
+                expectedSignature = ByteToString(hmacsha256.ComputeHash(Encoding.UTF8.GetBytes(jsonStr)));
             }
-            if (!SlowEquals(expectedSignature, signature))
+            if (!SlowEquals(Encoding.UTF8.GetBytes(expectedSignature), Encoding.UTF8.GetBytes(signature)))
             {
                 Console.Error.WriteLine("Bad signed request from BigCommerce!");
                 return null;
@@ -164,6 +163,15 @@ namespace SampleApp.Controllers
             for (int i = 0; i < a.Length && i < b.Length; i++)
                 diff |= (uint)(a[i] ^ b[i]);
             return diff == 0;
+        }
+
+        // from: https://stackoverflow.com/a/12804391/7414734
+        static string ByteToString(byte[] buff)
+        {
+            string sbinary = "";
+            for (int i = 0; i < buff.Length; i++)
+                sbinary += buff[i].ToString("X2"); /* hex format */
+            return sbinary.ToLower();
         }
 
         class OauthResponseDto
