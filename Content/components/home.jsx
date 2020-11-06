@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProgressCircle } from '@bigcommerce/big-design';
+import { ProgressCircle, Box, Panel, Flex, FlexItem, H2, H3 } from '@bigcommerce/big-design';
 import { ApiService } from '../services/apiService';
 
 export default class Home extends React.Component {
@@ -42,7 +42,7 @@ export default class Home extends React.Component {
             },
             {
                 label: "Inventory Count",
-                index: "variant_count",
+                index: "inventory_count",
                 format: "number",
             },
             {
@@ -54,87 +54,88 @@ export default class Home extends React.Component {
 
         return (
             <div className="container">
-                <div className="row">
-                    <div className="col-md-8">
-                        <div className="card">
-                            <div className="card-header">Home Page</div>
+               <div className="row">
+                   <div className="col-md-8">
 
-                            <div className="card-body">
-                                {
-                                    (this.state.isStoreInfoLoading || this.state.isCatalogSummaryLoading)
-                                        ?
-                                        <ProgressCircle size="large" />
-                                        :
-                                        <div className="row">
-                                            {fieldsInSummary.map(function (summaryItem, index) {
-                                                return <div className="col-12 col-lg-6 col-xl" key={index}>
-                                                    <div className="card">
-                                                        <div className="card-body">
-                                                            <div className="row align-items-center">
-                                                                <div className="col">
-                                                                    <h6 className="card-title text-uppercase text-muted mb-2">
-                                                                        {summaryItem.label}
-                                                                    </h6>
-                                                                    <span className="h2 mb-0">
-                                                                        {
-                                                                            summaryItem.format === 'currency'
-                                                                                ?
-                                                                                new Intl.NumberFormat(undefined, { style: 'currency', currency: this.state.storeInfo.currency }).format(this.state.catalogSummary[summaryItem.index])
-                                                                                :
-                                                                                this.state.catalogSummary[summaryItem.index]
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }.bind(this))}
-                                        </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-4">
-                        <div className="card">
-                            <div className="card-header">Side Bar</div>
+                       <Box backgroundColor="secondary10" border="box" borderRadius="normal" padding="medium">
+                            <H2>Home Page</H2>
+                        </Box>
 
-                            <div className="card-body">
-                                {
-                                    this.state.isStoreInfoLoading
-                                        ?
-                                        <ProgressCircle size="large" />
-                                        :
-                                        <section>
-                                            {
-                                                this.state.storeInfo.logo.url
-                                                    ?
-                                                    <img src={this.state.storeInfo.logo.url} className="img-fluid img-thumbnail" />
-                                                    :
-                                                    <h5>{this.state.storeInfo.name}</h5>
-                                            }
+                        <Box backgroundColor="white" border="box" borderRadius="normal" padding="medium">
+                               {
+                                   (this.state.isStoreInfoLoading || this.state.isCatalogSummaryLoading)
+                                       ?
+                                       <ProgressCircle size="large" />
+                                       :
+                                       <Flex
+                                        alignContent="stretch"
+                                        alignItems="stretch"
+                                        flexDirection="row"
+                                        justifyContent="flex-start"
+                                        flexWrap="wrap"
+                                        >
+                                           {fieldsInSummary.map(function (summaryItem) {
+                                               return <FlexItem alignSelf="auto" flexBasis="30%" margin="large" >
+                                                   <Panel header={summaryItem.label} padding="xxSmall">
+                                                        <H3>
+                                                    {
+                                                    summaryItem.format === 'currency'
+                                                        ?
+                                                        new Intl.NumberFormat(undefined, { style: 'currency', currency: this.state.storeInfo.currency }).format(this.state.catalogSummary[summaryItem.index])
+                                                        :
+                                                        this.state.catalogSummary[summaryItem.index]
+                                                                       }
+                                                        </H3>
+                                                    </Panel>
+                                                </FlexItem>
+                                           }.bind(this))}
+                                       </Flex>
+                               }
+                           </Box>
+                       
+                   </div>
+                   <div className="col-md-4">
+                       <div className="card">
+                       <Box backgroundColor="secondary10" border="box" borderRadius="normal" padding="medium">
+                            <H2>Side Bar</H2>
+                        </Box>
 
-                                            <ul className="list-group">
-                                                <li className="list-group-item">
-                                                    <div className="d-flex w-100 justify-content-between">
-                                                        <h5 className="mb-1">Domain</h5>
-                                                    </div>
-                                                    <p className="mb-1">{this.state.storeInfo.domain}</p>
-                                                </li>
-                                                <li className="list-group-item">
-                                                    <div className="d-flex w-100 justify-content-between">
-                                                        <h5 className="mb-1">Secure URL</h5>
-                                                    </div>
-                                                    <p className="mb-1">{this.state.storeInfo.secure_url}</p>
-                                                </li>
-                                            </ul>
+                        <Box backgroundColor="white" border="box" borderRadius="normal" padding="medium">
+                               {
+                                   this.state.isStoreInfoLoading
+                                       ?
+                                       <ProgressCircle size="large" />
+                                       :
+                                       <section>
+                                           {
+                                               this.state.storeInfo.logo.url
+                                                   ?
+                                                   <img src={this.state.storeInfo.logo.url} className="img-fluid img-thumbnail" />
+                                                   :
+                                                   <h5>{this.state.storeInfo.name}</h5>
+                                           }
 
-                                        </section>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                           <ul className="list-group">
+                                               <li className="list-group-item">
+                                                   <div className="d-flex w-100 justify-content-between">
+                                                       <h5 className="mb-1">Domain</h5>
+                                                   </div>
+                                                   <p className="mb-1">{this.state.storeInfo.domain}</p>
+                                               </li>
+                                               <li className="list-group-item">
+                                                   <div className="d-flex w-100 justify-content-between">
+                                                       <h5 className="mb-1">Secure URL</h5>
+                                                   </div>
+                                                   <p className="mb-1">{this.state.storeInfo.secure_url}</p>
+                                               </li>
+                                           </ul>
+
+                                       </section>
+                               }
+                           </Box>
+                       </div>
+                   </div>
+               </div>
             </div>
         );
     }
