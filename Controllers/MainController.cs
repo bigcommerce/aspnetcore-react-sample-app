@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text;
 using System.Net;
 using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace SampleApp.Controllers
 {
@@ -44,27 +45,30 @@ namespace SampleApp.Controllers
             {
                 return Error("Not enough information was passed to install this app.");
             }
-
-            StringContent json = new StringContent(JsonSerializer.Serialize(new InstallDto
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://login.bigcommerce.com/oauth2/token");
+            Dictionary<string, string> body = new Dictionary<string, string>()
             {
-                client_id = GetAppClientId(),
-                client_secret = GetAppSecret(),
-                redirect_uri = baseUrl + "/auth/install",
-                grant_type = "authorization_code",
-                code = query["code"],
-                scope = query["scope"],
-                context = query["context"]
-            }), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _clientFactory.CreateClient().PostAsync("https://login.bigcommerce.com/oauth2/token", json);
+                {"client_id", GetAppClientId()},
+                {"client_secret", GetAppSecret()},
+                {"redirect_uri", baseUrl + "/auth/install"},
+                {"grant_type", "authorization_code"},
+                {"code", query["code"]},
+                {"scope", query["scope"]},
+                {"context", query["context"]}
+            };
+            request.Content = new FormUrlEncodedContent(body);
+
+            HttpResponseMessage response = await _clientFactory.CreateClient().SendAsync(request);
+            string content = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    OauthResponseDto oauthResponse = JsonSerializer.Deserialize<OauthResponseDto>(response.Content.ToString());
+                    OauthResponseDto oauthResponse = JsonSerializer.Deserialize<OauthResponseDto>(content);
                     HttpContext.Session.SetString("store_hash", oauthResponse.context);
                     HttpContext.Session.SetString("access_token", oauthResponse.access_token);
-                    HttpContext.Session.SetString("user_id", oauthResponse.user.id);
+                    HttpContext.Session.SetInt32("user_id", oauthResponse.user.id);
                     HttpContext.Session.SetString("user_email", oauthResponse.user.email);
                     
                     // If the merchant installed the app via an external link, redirect back to the 
@@ -81,7 +85,7 @@ namespace SampleApp.Controllers
 
             if (response.Content.ToString().Length > 0 && response.StatusCode != HttpStatusCode.InternalServerError)
             {
-                errorMessage = response.Content.ToString();
+                errorMessage = content;
             }
 
             // If the merchant installed the app via an external link, redirect back to the 
@@ -102,9 +106,9 @@ namespace SampleApp.Controllers
                 VerifiedSignedRequest verifiedSignedRequest = VerifySignedRequest(signedPayload);
                 if (verifiedSignedRequest != null)
                 {
-                    HttpContext.Session.SetString("user_id", verifiedSignedRequest.user.id);
+                    HttpContext.Session.SetInt32("user_id", verifiedSignedRequest.user.id);
                     HttpContext.Session.SetString("user_email", verifiedSignedRequest.user.email);
-                    HttpContext.Session.SetString("owner_id", verifiedSignedRequest.owner.id);
+                    HttpContext.Session.SetInt32("owner_id", verifiedSignedRequest.owner.id);
                     HttpContext.Session.SetString("owner_email", verifiedSignedRequest.owner.email);
                     HttpContext.Session.SetString("store_hash", verifiedSignedRequest.context);
                 }
@@ -162,35 +166,25 @@ namespace SampleApp.Controllers
             return diff == 0;
         }
 
-        class InstallDto
-        {
-            public string client_id;
-            public string client_secret;
-            public string redirect_uri;
-            public string grant_type;
-            public string code;
-            public string scope;
-            public string context;
-        }
-
         class OauthResponseDto
         {
-            public string context;
-            public string access_token;
-            public OauthUserDto user;
+            public string context { get; set; }
+            public string access_token { get; set; }
+            public OauthUserDto user { get; set; }
         }
 
         class OauthUserDto
         {
-            public string id;
-            public string email;
+            public int id { get; set; }
+            public string username { get; set; }
+            public string email { get; set; }
         }
 
         class VerifiedSignedRequest
         {
-            public string context;
-            public OauthUserDto user;
-            public OauthUserDto owner;
+            public string context { get; set; }
+            public OauthUserDto user { get; set; }
+            public OauthUserDto owner { get; set; }
         }
     }
 }
