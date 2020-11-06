@@ -127,24 +127,25 @@ namespace SampleApp.Controllers
             return Redirect("/");
         }
 
-        [Route("/bc-api/{endpoint}")]
-        public async Task<HttpResponseMessage> ProxyBigCommerceApiRequest(string endpoint)
+        [Route("bc-api/{**endpoint}")]
+        public async Task<ActionResult> ProxyBigCommerceApiRequest(string endpoint)
         {
-            if (endpoint == "v2")
+            if (endpoint.Contains("v2"))
             {
                 // For v2 endpoints, add a .json to the end of each endpoint, to normalize against the v3 API standards
                 endpoint += ".json";
             }
             HttpResponseMessage response = await MakeBigCommerceApiRequest(endpoint);
-            return response;
+            Response.StatusCode = Convert.ToInt32(response.StatusCode);
+            Response.ContentType = "application/json";
+            string body = await response.Content.ReadAsStringAsync();
+            return Content(body);
         }
 
         private async Task<HttpResponseMessage> MakeBigCommerceApiRequest(string endpoint)
         {
             HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(Request.Method), "https://api.bigcommerce.com/" + GetStoreHash() + "/" + endpoint);
-            request.Headers.Add("X-Auth-Client", GetAppClientId());
             request.Headers.Add("X-Auth-Token", GetAccessToken());
-            request.Headers.Add("Content-Type", "application/json");
 
             if (Request.Method == "PUT")
             {
@@ -153,7 +154,7 @@ namespace SampleApp.Controllers
                 {
                     body = await reader.ReadToEndAsync();
                 }
-                request.Content = new StringContent(JsonSerializer.Serialize(body));
+                request.Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
             }
 
             return await _clientFactory.CreateClient().SendAsync(request);
