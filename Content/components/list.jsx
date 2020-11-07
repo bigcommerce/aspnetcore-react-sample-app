@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from './table.jsx';
-import { ProgressBar, Button } from '@bigcommerce/big-design';
+import { ProgressBar, Button, Text } from '@bigcommerce/big-design';
 import {ApiService} from '../services/apiService';
 
 export default class List extends React.Component {
@@ -39,17 +39,17 @@ export default class List extends React.Component {
           {
             label: "Order Status",
             callback: function(data) {
-              let badgeClass = 'badge badge-';
+              let color;
               if (data.status_id === 5) {
-                badgeClass += 'danger';
+                color = 'danger';
               } else if (data.status_id === 2 || data.status_id === 10) {
-                badgeClass += 'success';
+                color = 'success';
               } else {
-                badgeClass += 'light';
+                color = 'secondary';
               }
 
               return (
-                <span className={ badgeClass }>{ data.status }</span>
+                <Text color={color}>{ data.status }</Text>
               );
             },
           },
