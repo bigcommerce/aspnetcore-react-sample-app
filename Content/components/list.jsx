@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from './table.jsx';
-import { ProgressBar } from '@bigcommerce/big-design';
+import { ProgressBar, Button } from '@bigcommerce/big-design';
 import {ApiService} from '../services/apiService';
 
 export default class List extends React.Component {
@@ -58,7 +58,7 @@ export default class List extends React.Component {
             callback: function(data) {
               if (data.status_id !== 5) {
                 return (
-                  <button type="button" className="btn btn-danger" onClick={(e) => this.cancelOrder(data.id, e)}>Cancel</button>
+                  <Button actionType="destructive" onClick={(e) => this.cancelOrder(data.id, e)}>Cancel</Button>
                 );
               }
             }.bind(this),
