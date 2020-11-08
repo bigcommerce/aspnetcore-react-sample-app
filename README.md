@@ -26,6 +26,28 @@ dotnet run
 
 After compiling the app should be reachable at the site you are hosting the app on locally. i.e https://localhost:9457/
 
+### Environment
+
+Set the following environment variables (or add a `.env` file):
+
+```
+# Existing env variable. Make sure it matches the base URL of your app
+APP_URL=https://laravel-react-bigcommerce-app.test
+
+[ ... other existing variables ... ]
+
+# New env variables for BC app and a test API credentials for local dev
+# The Client ID and Secret can be found at https://devtools.bigcommerce.com/my/apps by selecting 'View Client ID'
+BC_APP_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+BC_APP_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# These local credentials can be created by creating an API Account within your BigCommerce store (Advanced Settings > API Accounts)
+BC_LOCAL_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+BC_LOCAL_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+BC_LOCAL_ACCESS_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+BC_LOCAL_STORE_HASH=stores/xxxxxxxxxxx
+```
+
 When running the app outside of BigCommerce, setting the follow environment variable will cause the app to use the local API credential (also in the .env file):
 
 ```
