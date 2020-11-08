@@ -1,6 +1,6 @@
 # ASP.NET Core React App for BigCommerce
 
-This is a basic BigCommerce app with two screens, a catalog summary view and list of orders that can be cancelled, built using ASP.NET Core and React.
+This is a basic BigCommerce app with two screens, a catalog summary view and list of orders that can be cancelled, built using ASP.NET Core and React. It uses BigCommerce's design library, [BigDesign](https://developer.bigcommerce.com/big-design/).
 
 It's meant to fast track your ability to take a concept for an app to something usable within the BigCommerce control panel. A live store can install this app while it runs locally.
 
