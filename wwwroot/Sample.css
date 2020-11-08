@@ -8,16 +8,5 @@
  */
 
 body {
-	font-family: Calibri, Verdana, sans-serif;
-}
-
-.commentList {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-
-.commentList li {
-	border-bottom: 1px solid #999;
-	padding: 0.5em 0;
+  font-family: Calibri, Verdana, sans-serif;
 }
