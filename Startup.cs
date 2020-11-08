@@ -32,6 +32,8 @@ namespace React.Sample.Webpack.CoreMvc
 			{
 				options.Cookie.HttpOnly = true;
 				options.Cookie.IsEssential = true;
+				options.Cookie.SameSite = SameSiteMode.None;
+				options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 			});
 
 			services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
