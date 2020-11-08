@@ -1,6 +1,5 @@
 import React from 'react';
-import { Table } from './table.jsx';
-import { ProgressBar, Button, Text } from '@bigcommerce/big-design';
+import { ProgressBar, Button, Text, Table } from '@bigcommerce/big-design';
 import {ApiService} from '../services/apiService';
 
 export default class List extends React.Component {
@@ -16,29 +15,28 @@ export default class List extends React.Component {
       tableHeaders:
         [
           {
-            label: "Order ID",
-            index: "id",
-            callback: function(orderId) {
-              return orderId;
+            header: "Order ID",
+            hash: "id",
+            render: ({id}) => id,
+          },
+          {
+            header: "Billing Name",
+            hash: "billing_address",
+            render: function({billing_address}) {
+              return `${billing_address.first_name} ${billing_address.last_name}`;
             },
           },
           {
-            label: "Billing Name",
-            index: "billing_address",
-            callback: function(billingAddress) {
-              return `${billingAddress.first_name} ${billingAddress.last_name}`;
+            header: "Order Total",
+            hash: "total_inc_tax",
+            render: function({total_inc_tax}) {
+              return total_inc_tax;
             },
           },
           {
-            label: "Order Total",
-            index: "total_inc_tax",
-            callback: function(orderTotal) {
-              return orderTotal;
-            },
-          },
-          {
-            label: "Order Status",
-            callback: function(data) {
+            header: "Order Status",
+            hash: "order_status",
+            render: function(data) {
               let color;
               if (data.status_id === 5) {
                 color = 'danger';
@@ -54,8 +52,9 @@ export default class List extends React.Component {
             },
           },
           {
-            label: "Actions",
-            callback: function(data) {
+            header: "Actions",
+            hash: "actions",
+            render: function(data) {
               if (data.status_id !== 5) {
                 return (
                   <Button actionType="destructive" onClick={(e) => this.cancelOrder(data.id, e)}>Cancel</Button>
@@ -102,6 +101,8 @@ export default class List extends React.Component {
   }
 
   render() {
+    console.log("columns", this.state.tableHeaders);
+    console.log("items", this.state.orders.data);
     return (
       <div className="container">
         <div className="row">
@@ -118,7 +119,7 @@ export default class List extends React.Component {
                     this.hasOrders()
                     ? 
                     <section>
-                      <Table tableHeaders={this.state.tableHeaders} tableData={this.state.orders.data} />
+                      <Table columns={this.state.tableHeaders} items={this.state.orders.data} />
                     </section>
                     : 
                     <section>
