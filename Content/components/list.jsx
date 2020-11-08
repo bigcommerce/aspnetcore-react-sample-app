@@ -101,8 +101,6 @@ export default class List extends React.Component {
   }
 
   render() {
-    console.log("columns", this.state.tableHeaders);
-    console.log("items", this.state.orders.data);
     return (
       <div className="container">
         <div className="row">
