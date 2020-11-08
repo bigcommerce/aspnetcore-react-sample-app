@@ -4,6 +4,8 @@ This is a basic BigCommerce app with two screens, a catalog summary view and lis
 
 It's meant to fast track your ability to take a concept for an app to something usable within the BigCommerce control panel. A live store can install this app while it runs locally.
 
+![Demo](https://user-images.githubusercontent.com/20454870/98466364-c0b98100-21d7-11eb-8fb1-605410d2cdf6.gif)
+
 ## Installation
 
 Before jumping in, you'll want to make sure you have the system requirements met:
