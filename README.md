@@ -32,7 +32,7 @@ Set the following environment variables (or add a `.env` file):
 
 ```
 # Existing env variable. Make sure it matches the base URL of your app
-APP_URL=https://laravel-react-bigcommerce-app.test
+APP_URL=https://localhost:9457
 
 [ ... other existing variables ... ]
 
