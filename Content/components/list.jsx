@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProgressBar, Button, Text, Table } from '@bigcommerce/big-design';
+import { ProgressBar, Button, Text, Table, Box, H2 } from '@bigcommerce/big-design';
 import {ApiService} from '../services/apiService';
 
 export default class List extends React.Component {
@@ -108,9 +108,11 @@ export default class List extends React.Component {
         <div className="row">
           <div className="col-md-12">
             <div className="card">
-                <div className="card-header">List Orders</div>
+                <Box backgroundColor="secondary10" border="box" borderRadius="normal" padding="medium">
+                    <H2>List Orders</H2>
+                  </Box>
 
-                <div className="card-body">
+                  <Box backgroundColor="white" border="box" borderRadius="normal" padding="medium">
                   {
                     this.state.isOrdersLoading
                     ? 
@@ -126,7 +128,7 @@ export default class List extends React.Component {
                       <div className="emptyTable">No orders exist yet!</div>
                     </section>
                   }
-                </div>
+                </Box>
             </div>
           </div>
         </div>
