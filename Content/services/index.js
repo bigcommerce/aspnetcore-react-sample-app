@@ -1,5 +1,3 @@
-﻿import { ApiService } from './apiService';
+﻿import { ApiService } from "./apiService";
 
-export {
-    ApiService,
-};
+export { ApiService };
