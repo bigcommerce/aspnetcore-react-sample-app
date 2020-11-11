@@ -1,5 +1,14 @@
 import React from "react";
-import { Panel, Text, H4, Box, ProgressCircle } from "@bigcommerce/big-design";
+import {
+  Panel,
+  Text,
+  H1,
+  H4,
+  Box,
+  ProgressCircle,
+  Grid,
+  GridItem,
+} from "@bigcommerce/big-design";
 import { ApiService } from "../services/apiService";
 
 export default class Home extends React.Component {
@@ -78,6 +87,32 @@ export default class Home extends React.Component {
               <H4>Domain</H4>
               <Text color="secondary60">{this.state.storeInfo.domain}</Text>
             </Box>
+          )}
+        </Panel>
+        <Panel header="Catalog Summary">
+          <Text bold={true}>A simple overview of your catalog.</Text>
+          {this.state.isStoreInfoLoading ? (
+            <ProgressCircle size="large" />
+          ) : (
+            <Grid gridAutoFlow="column">
+              {fieldsInSummary.map((field) => {
+                return (
+                  <GridItem key={field.index}>
+                    <Box border="box" borderRadius="normal" padding="medium">
+                      <H4>{field.label}</H4>
+                      <H1>
+                        {field.format === "currency"
+                          ? new Intl.NumberFormat(undefined, {
+                              style: "currency",
+                              currency: this.state.storeInfo.currency,
+                            }).format(this.state.catalogSummary[field.index])
+                          : this.state.catalogSummary[field.index]}
+                      </H1>
+                    </Box>
+                  </GridItem>
+                );
+              })}
+            </Grid>
           )}
         </Panel>
       </React.Fragment>
