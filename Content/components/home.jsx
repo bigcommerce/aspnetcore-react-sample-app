@@ -2,7 +2,7 @@ import React from "react";
 import {
   Panel,
   Text,
-  H1,
+  H0,
   H4,
   Box,
   ProgressCircle,
@@ -98,16 +98,16 @@ export default class Home extends React.Component {
               {fieldsInSummary.map((field) => {
                 return (
                   <GridItem key={field.index}>
-                    <Box border="box" borderRadius="normal" padding="medium">
+                    <Box border="box" borderRadius="normal" padding="small">
                       <H4>{field.label}</H4>
-                      <H1>
+                      <H0 color="secondary60">
                         {field.format === "currency"
                           ? new Intl.NumberFormat(undefined, {
                               style: "currency",
                               currency: this.state.storeInfo.currency,
                             }).format(this.state.catalogSummary[field.index])
                           : this.state.catalogSummary[field.index]}
-                      </H1>
+                      </H0>
                     </Box>
                   </GridItem>
                 );
