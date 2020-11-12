@@ -5,6 +5,7 @@ import {
   Text,
   Table,
   Panel,
+  Badge,
 } from "@bigcommerce/big-design";
 import { ApiService } from "../services/apiService";
 
@@ -12,6 +13,22 @@ const List = () => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
 
+  const getVariant = (statusId) => {
+    // see https://developer.bigcommerce.com/api-reference/store-management/orders/order-status/getorderstatus
+    const ids = {
+      success: [2, 10],
+      warning: [0, 3, 12, 13, 14],
+      danger: [4, 5, 6],
+    };
+    if (ids.danger.includes(statusId)) {
+      return "danger";
+    } else if (ids.success.includes(statusId)) {
+      return "success";
+    } else if (ids.warning.includes(statusId)) {
+      return "warning";
+    }
+    return "secondary";
+  };
   const tableHeaders = [
     {
       header: "Order ID",
@@ -38,17 +55,8 @@ const List = () => {
     {
       header: "Order Status",
       hash: "order_status",
-      render: function (data) {
-        let color;
-        if (data.status_id === 5) {
-          color = "danger";
-        } else if (data.status_id === 2 || data.status_id === 10) {
-          color = "success";
-        } else {
-          color = "secondary";
-        }
-
-        return <Text color={color}>{data.status}</Text>;
+      render: function ({ status_id, status }) {
+        return <Badge variant={getVariant(status_id)} label={status}></Badge>;
       },
     },
     {
