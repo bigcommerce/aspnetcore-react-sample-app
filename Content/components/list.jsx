@@ -68,17 +68,19 @@ const List = () => {
     {
       header: "Actions",
       hash: "actions",
-      render: function (data) {
-        if (data.status_id !== 5) {
+      render: function ({ status_id, id }) {
+        const variant = getVariant(status_id);
+        if (variant !== "danger" && variant !== "success") {
           return (
             <Button
               actionType="destructive"
-              onClick={(e) => cancelOrder(data.id, e)}
+              onClick={(e) => cancelOrder(id, e)}
             >
               Cancel
             </Button>
           );
         }
+        return <></>;
       },
     },
   ];
