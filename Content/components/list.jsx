@@ -6,12 +6,16 @@ import {
   Table,
   Panel,
   Badge,
+  Link,
 } from "@bigcommerce/big-design";
 import { ApiService } from "../services/apiService";
+
+let controlPanelBaseUrl;
 
 const List = () => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
+  const [controlPanelBaseUrl, setControlPanelBaseUrl] = useState(null);
 
   const getVariant = (statusId) => {
     // see https://developer.bigcommerce.com/api-reference/store-management/orders/order-status/getorderstatus
@@ -33,7 +37,9 @@ const List = () => {
     {
       header: "Order ID",
       hash: "id",
-      render: ({ id }) => id,
+      render: ({ id }) => (
+        <Link href={`${controlPanelBaseUrl}/manage/orders/${id}`}>{id}</Link>
+      ),
     },
     {
       header: "Billing Name",
@@ -103,6 +109,14 @@ const List = () => {
 
   useEffect(() => {
     loadOrders();
+  }, []);
+
+  useEffect(() => {
+    const fetchControlPanelBaseUrl = async () => {
+      const { data } = await ApiService.getResourceEntry("v2/store");
+      setControlPanelBaseUrl(data.control_panel_base_url);
+    };
+    fetchControlPanelBaseUrl();
   }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
