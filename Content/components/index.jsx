@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import Home from "./home.jsx";
 import List from "./list.jsx";
-import { Tabs, H0, Box } from "@bigcommerce/big-design";
+import { Tabs, H0, Box, GlobalStyles } from "@bigcommerce/big-design";
 
 export default function Index() {
   const [activeTab, setActiveTab] = React.useState("tab1");
@@ -13,6 +13,7 @@ export default function Index() {
 
   return (
     <React.Fragment>
+      <GlobalStyles />
       <Box
         backgroundColor="secondary20"
         borderRadius="normal"
