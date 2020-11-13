@@ -12,7 +12,7 @@ export default function Index() {
   ];
 
   return (
-    <React.Fragment>
+    <div style={{ height: "100vh", backgroundColor: "#ECEEF5" }}>
       <GlobalStyles />
       <Box
         backgroundColor="secondary20"
@@ -32,12 +32,13 @@ export default function Index() {
       <Box
         backgroundColor="secondary20"
         border="box"
+        borderBottom="none"
         borderRadius="normal"
         padding="medium"
       >
         {activeTab === "tab1" && <Home />}
         {activeTab === "tab2" && <List />}
       </Box>
-    </React.Fragment>
+    </div>
   );
 }
