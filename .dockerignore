@@ -1,0 +1,13 @@
+**
+
+!/Content
+!/Controllers
+!/Properties
+!/Views
+!/.babelrc
+!/appsettings.json
+!/package*.json
+!/*.cs
+!/*.csproj
+!/webpack.config.js
+!/docker

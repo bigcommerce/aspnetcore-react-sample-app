@@ -60,6 +60,24 @@ Likewise, setting it to production will use only the credentials received during
 APP_ENV=production
 ```
 
+## Quick start demo with Docker
+
+###### For local testing only
+
+To quickly see the app in action with your credentials, run the following command:
+
+```bash
+docker run -d --restart=unless-stopped \
+    -p 80:80 -p 443:443 \
+    -e BC_LOCAL_CLIENT_ID=<YOUR_BC_LOCAL_CLIENT_ID> \
+    -e BC_LOCAL_SECRET=<YOUR_BC_LOCAL_SECRET> \
+    -e BC_LOCAL_ACCESS_TOKEN=<YOUR_BC_LOCAL_ACCESS_TOKEN> \
+    -e BC_LOCAL_STORE_HASH=<YOUR_BC_LOCAL_STORE_HASH> \
+    yardenshoham/aspnetcore-react-sample-app:demo
+```
+
+Then, go to https://localhost.
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
