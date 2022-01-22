@@ -18,7 +18,7 @@
     "react-jss": "^8.6.1",
     "react-router-dom": "^5.0.0",
     "react-select": "^3.0.4",
-    "reactstrap": "^8.0.0",
+    "reactstrap": "^8.10.1",
     "styled-components": "^4.4.1"
   },
   "devDependencies": {
