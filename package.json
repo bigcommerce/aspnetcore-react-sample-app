@@ -7,7 +7,7 @@
     "build": "rimraf wwwroot/dist && webpack"
   },
   "dependencies": {
-    "@bigcommerce/big-design": "^0.24.0",
+    "@bigcommerce/big-design": "^0.30.2",
     "axios": "^0.21.0",
     "emotion": "^9.2.12",
     "emotion-server": "^9.2.12",
